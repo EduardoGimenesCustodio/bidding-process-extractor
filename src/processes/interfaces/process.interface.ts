@@ -1,6 +1,7 @@
-import { Process } from '../interfaces/process.interface';
+import { Item } from './item.interface';
 
-export class CreateProcessDto implements Omit<Process, 'id'> {
+export interface Process {
+  id: number;
   codigoLicitacao: string;
   identificacao: string;
   numero: string;
@@ -8,4 +9,5 @@ export class CreateProcessDto implements Omit<Process, 'id'> {
   codigoSituacaoEdital: number;
   codigoStatus: number;
   dataHoraInicioLances: Date;
+  itens?: Item[];
 }
