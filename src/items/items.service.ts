@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { DataSource } from 'typeorm';
-import { Item } from 'src/infra/database/typeOrm/entities/item.entity';
-import { IItem } from './interfaces/item.interface';
+import { ItemModel } from 'src/infra/database/typeOrm/models/item.entity';
+import { ItemEntity } from './entities/item.entity';
 
 @Injectable()
 export class ItemsService {
@@ -15,7 +15,7 @@ export class ItemsService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const item: Item = createItemDto;
+      const item: Omit<ItemModel, 'id'> = createItemDto;
       await queryRunner.manager.save(item);
 
       await queryRunner.commitTransaction();
@@ -26,15 +26,15 @@ export class ItemsService {
     }
   }
 
-  async findAll(): Promise<IItem[]> {
-    let items: IItem[];
+  async findAll(): Promise<ItemEntity[]> {
+    let items: ItemEntity[];
 
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      items = await queryRunner.manager.find(Item);
+      items = await queryRunner.manager.find(ItemModel);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -46,15 +46,15 @@ export class ItemsService {
     }
   }
 
-  async findOne(id: number): Promise<IItem> {
-    let item: IItem;
+  async findOne(id: number): Promise<ItemEntity> {
+    let item: ItemEntity;
 
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      item = await queryRunner.manager.findOne(Item, { where: { id } });
+      item = await queryRunner.manager.findOne(ItemModel, { where: { id } });
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -72,7 +72,7 @@ export class ItemsService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await queryRunner.manager.update(Item, id, updateItemDto);
+      await queryRunner.manager.update(ItemModel, id, updateItemDto);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -88,7 +88,7 @@ export class ItemsService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const item = await queryRunner.manager.findOne(Item, {
+      const item = await queryRunner.manager.findOne(ItemModel, {
         where: { id },
       });
       await queryRunner.manager.remove(item);

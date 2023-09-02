@@ -10,7 +10,7 @@ import {
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
-import { IItem } from './interfaces/item.interface';
+import { ItemEntity } from './entities/item.entity';
 
 @Controller('items')
 export class ItemsController {
@@ -22,12 +22,12 @@ export class ItemsController {
   }
 
   @Get()
-  async findAll(): Promise<IItem[]> {
+  async findAll(): Promise<ItemEntity[]> {
     return await this.itemsService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<IItem> {
+  async findOne(@Param('id') id: string): Promise<ItemEntity> {
     return await this.itemsService.findOne(+id);
   }
 

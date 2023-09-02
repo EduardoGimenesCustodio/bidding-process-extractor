@@ -1,10 +1,10 @@
-import { Item } from 'src/infra/database/typeOrm/entities/item.entity';
+import { ItemModel } from 'src/infra/database/typeOrm/models/item.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Process {
+export class ProcessModel {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column()
   codigoLicitacao: string;
@@ -27,6 +27,6 @@ export class Process {
   @Column()
   dataHoraInicioLances: Date;
 
-  @OneToMany(() => Item, (item) => item.process)
-  items?: Item[];
+  @OneToMany(() => ItemModel, (item) => item.process)
+  items?: ItemModel[];
 }

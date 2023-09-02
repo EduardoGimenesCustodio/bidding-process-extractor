@@ -1,10 +1,10 @@
-import { Process } from 'src/infra/database/typeOrm/entities/process.entity';
+import { ProcessModel } from 'src/infra/database/typeOrm/models/process.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Item {
+export class ItemModel {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column()
   quantidade: number;
@@ -24,6 +24,6 @@ export class Item {
   @Column()
   processId: number;
 
-  @ManyToOne(() => Process, (process) => process.items)
-  process?: Process;
+  @ManyToOne(() => ProcessModel, (process) => process.items)
+  process?: ProcessModel;
 }

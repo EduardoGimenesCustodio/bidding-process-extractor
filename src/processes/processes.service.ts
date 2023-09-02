@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateProcessDto } from './dto/create-process.dto';
 import { UpdateProcessDto } from './dto/update-process.dto';
 import { DataSource } from 'typeorm';
-import { Process } from '../infra/database/typeOrm/entities/process.entity';
-import { IProcess } from './interfaces/process.interface';
+import { ProcessModel } from '../infra/database/typeOrm/models/process.entity';
+import { ProcessEntity } from './entities/process.entity';
 
 @Injectable()
 export class ProcessesService {
@@ -15,7 +15,8 @@ export class ProcessesService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const process: Process = createProcessDto;
+      const process: Omit<ProcessModel, 'id'> = createProcessDto;
+
       await queryRunner.manager.save(process);
 
       await queryRunner.commitTransaction();
@@ -26,15 +27,15 @@ export class ProcessesService {
     }
   }
 
-  async findAll(): Promise<IProcess[]> {
-    let processes: IProcess[];
+  async findAll(): Promise<ProcessEntity[]> {
+    let processes: ProcessEntity[];
 
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      processes = await queryRunner.manager.find(Process);
+      processes = await queryRunner.manager.find(ProcessModel);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -46,15 +47,17 @@ export class ProcessesService {
     }
   }
 
-  async findOne(id: number): Promise<IProcess> {
-    let process: IProcess;
+  async findOne(id: number): Promise<ProcessEntity> {
+    let process: ProcessEntity;
 
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      process = await queryRunner.manager.findOne(Process, { where: { id } });
+      process = await queryRunner.manager.findOne(ProcessModel, {
+        where: { id },
+      });
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -72,7 +75,7 @@ export class ProcessesService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await queryRunner.manager.update(Process, id, updateProcessDto);
+      await queryRunner.manager.update(ProcessModel, id, updateProcessDto);
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -88,7 +91,7 @@ export class ProcessesService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const process = await queryRunner.manager.findOne(Process, {
+      const process = await queryRunner.manager.findOne(ProcessModel, {
         where: { id },
       });
       await queryRunner.manager.remove(process);

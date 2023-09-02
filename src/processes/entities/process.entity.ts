@@ -1,7 +1,7 @@
-import { IItem } from '../../items/interfaces/item.interface';
+import { ItemEntity } from '../../items/entities/item.entity';
 
-export interface IProcess {
-  id?: number;
+export class ProcessEntity {
+  id: number;
   codigoLicitacao: string;
   identificacao: string;
   numero: string;
@@ -9,5 +9,5 @@ export interface IProcess {
   codigoSituacaoEdital: number;
   codigoStatus: number;
   dataHoraInicioLances: Date;
-  items?: IItem[];
+  items?: ItemEntity[];
 }

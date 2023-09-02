@@ -10,7 +10,7 @@ import {
 import { ProcessesService } from './processes.service';
 import { CreateProcessDto } from './dto/create-process.dto';
 import { UpdateProcessDto } from './dto/update-process.dto';
-import { IProcess } from './interfaces/process.interface';
+import { ProcessEntity } from './entities/process.entity';
 
 @Controller('processes')
 export class ProcessesController {
@@ -22,12 +22,12 @@ export class ProcessesController {
   }
 
   @Get()
-  async findAll(): Promise<IProcess[]> {
+  async findAll(): Promise<ProcessEntity[]> {
     return await this.processesService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<IProcess> {
+  async findOne(@Param('id') id: string): Promise<ProcessEntity> {
     return await this.processesService.findOne(+id);
   }
 
@@ -45,7 +45,7 @@ export class ProcessesController {
   }
 
   @Get('extract')
-  async extractProcesses(): Promise<IProcess[]> {
-    return await this.processesService.findAll();
+  async extractProcesses(): Promise<void> {
+    return;
   }
 }
