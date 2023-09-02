@@ -1,4 +1,4 @@
-import { Item } from './item.interface';
+import { Item } from '../../items/interfaces/item.interface';
 
 export interface Process {
   id: number;
