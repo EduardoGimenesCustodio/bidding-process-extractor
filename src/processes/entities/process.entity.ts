@@ -4,7 +4,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Process {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
   codigoLicitacao: string;
@@ -28,5 +28,5 @@ export class Process {
   dataHoraInicioLances: Date;
 
   @OneToMany(() => Item, (item) => item.process)
-  items: Item[];
+  items?: Item[];
 }

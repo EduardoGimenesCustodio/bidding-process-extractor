@@ -1,7 +1,7 @@
-import { Item } from '../../items/interfaces/item.interface';
+import { IItem } from '../../items/interfaces/item.interface';
 
-export interface Process {
-  id: number;
+export interface IProcess {
+  id?: number;
   codigoLicitacao: string;
   identificacao: string;
   numero: string;
@@ -9,5 +9,5 @@ export interface Process {
   codigoSituacaoEdital: number;
   codigoStatus: number;
   dataHoraInicioLances: Date;
-  items?: Item[];
+  items?: IItem[];
 }

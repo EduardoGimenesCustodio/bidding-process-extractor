@@ -1,6 +1,6 @@
-import { Process } from '../interfaces/process.interface';
+import { IProcess } from '../interfaces/process.interface';
 
-export class CreateProcessDto implements Omit<Process, 'id'> {
+export class CreateProcessDto implements Omit<IProcess, 'id'> {
   codigoLicitacao: string;
   identificacao: string;
   numero: string;

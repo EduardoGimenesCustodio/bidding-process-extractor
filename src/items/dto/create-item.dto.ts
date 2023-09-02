@@ -1,6 +1,6 @@
-import { Item } from '../interfaces/item.interface';
+import { IItem } from '../interfaces/item.interface';
 
-export class CreateItemDto implements Omit<Item, 'id'> {
+export class CreateItemDto implements Omit<IItem, 'id'> {
   quantidade: number;
   valorReferencia: number;
   descricao: string;
