@@ -1,13 +1,13 @@
 import { ItemModel } from 'src/infra/database/typeOrm/models/item.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('process')
 export class ProcessModel {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  codigoLicitacao: string;
+  codigoLicitacao: number;
 
   @Column()
   identificacao: string;

@@ -1,7 +1,7 @@
 import { ProcessModel } from 'src/infra/database/typeOrm/models/process.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('item')
 export class ItemModel {
   @PrimaryGeneratedColumn()
   id: number;

@@ -2,7 +2,7 @@ import { ItemEntity } from '../../items/entities/item.entity';
 
 export class ProcessEntity {
   id: number;
-  codigoLicitacao: string;
+  codigoLicitacao: number;
   identificacao: string;
   numero: string;
   resumo: string;
