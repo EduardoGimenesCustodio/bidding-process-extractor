@@ -9,5 +9,5 @@ export interface Process {
   codigoSituacaoEdital: number;
   codigoStatus: number;
   dataHoraInicioLances: Date;
-  itens?: Item[];
+  items?: Item[];
 }
