@@ -1,6 +1,10 @@
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This API automatically extracts bidding processes from the [public procurement portal](https://www.portaldecompraspublicas.com.br/processos), in addition to allowing specific extractions. Stored bidding processes are updated in case of modifications and can be listed, edited and/or deleted.
+
+## API Documentation
+
+The Bidding Process Extractor API description can be accessed via the [/api](http://localhost:3000/api) route.
 
 ## Installation
 
