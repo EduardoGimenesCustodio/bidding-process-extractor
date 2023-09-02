@@ -1,4 +1,4 @@
-import { Process } from 'src/processes/entities/process.entity';
+import { Process } from 'src/infra/database/typeOrm/entities/process.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
