@@ -4,7 +4,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Item {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
   quantidade: number;
@@ -21,6 +21,9 @@ export class Item {
   @Column()
   codigo: number;
 
+  @Column()
+  processId: number;
+
   @ManyToOne(() => Process, (process) => process.items)
-  process: Process;
+  process?: Process;
 }

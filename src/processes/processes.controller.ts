@@ -17,8 +17,8 @@ export class ProcessesController {
   constructor(private readonly processesService: ProcessesService) {}
 
   @Post()
-  create(@Body() createProcessDto: CreateProcessDto): Promise<void> {
-    return this.processesService.create(createProcessDto);
+  async create(@Body() createProcessDto: CreateProcessDto): Promise<void> {
+    return await this.processesService.create(createProcessDto);
   }
 
   @Get()
@@ -27,20 +27,25 @@ export class ProcessesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<IProcess> {
-    return this.processesService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<IProcess> {
+    return await this.processesService.findOne(+id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateProcessDto: UpdateProcessDto,
   ): Promise<void> {
-    return this.processesService.update(+id, updateProcessDto);
+    return await this.processesService.update(+id, updateProcessDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.processesService.remove(+id);
+  async remove(@Param('id') id: string): Promise<void> {
+    return await this.processesService.remove(+id);
+  }
+
+  @Get('extract')
+  async extractProcesses(): Promise<IProcess[]> {
+    return await this.processesService.findAll();
   }
 }
