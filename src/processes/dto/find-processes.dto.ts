@@ -3,4 +3,6 @@ export class FindProcessesDto {
   numero?: string;
   resumo?: string;
   descricaoItem?: string;
+  skip?: string;
+  take?: string;
 }

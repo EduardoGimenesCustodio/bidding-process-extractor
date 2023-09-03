@@ -59,7 +59,9 @@ export class ProcessesService {
 
       processes = await queryRunner.manager.find(ProcessModel, {
         where: whereOptions,
-        relations: ['items'],
+        relations: { items: true },
+        skip: findProcessesDto.skip ? +findProcessesDto.skip : null,
+        take: findProcessesDto.take ? +findProcessesDto.take : null,
       });
 
       await queryRunner.commitTransaction();
