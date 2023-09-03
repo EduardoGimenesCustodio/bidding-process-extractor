@@ -4,12 +4,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ItemsModule } from './items/items.module';
 import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env', '.env.development.local'],
+      envFilePath: ['.env'],
       load: [configuration],
     }),
     TypeOrmModule.forRootAsync({
@@ -25,6 +26,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         autoLoadEntities: true,
       }),
     }),
+    EventEmitterModule.forRoot(),
     ProcessesModule,
     ItemsModule,
   ],
