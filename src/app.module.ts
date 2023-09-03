@@ -9,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.development.local'],
+      envFilePath: ['.env', '.env.development.local'],
       load: [configuration],
     }),
     TypeOrmModule.forRootAsync({
