@@ -1,4 +1,4 @@
-import { ProcessModel } from 'src/infra/database/typeOrm/models/process.entity';
+import { ProcessModel } from './process.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('item')
@@ -6,10 +6,10 @@ export class ItemModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'float' })
   quantidade: number;
 
-  @Column()
+  @Column({ type: 'float' })
   valorReferencia: number;
 
   @Column()
@@ -24,6 +24,9 @@ export class ItemModel {
   @Column()
   processId: number;
 
-  @ManyToOne(() => ProcessModel, (process) => process.items)
+  @ManyToOne(() => ProcessModel, (process) => process.items, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   process?: ProcessModel;
 }

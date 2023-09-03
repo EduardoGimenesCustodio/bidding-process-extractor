@@ -1,4 +1,4 @@
-import { ItemModel } from 'src/infra/database/typeOrm/models/item.entity';
+import { ItemModel } from './item.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('process')
