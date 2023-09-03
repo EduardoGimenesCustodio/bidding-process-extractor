@@ -5,10 +5,15 @@ import { DataSource, Like, MoreThanOrEqual } from 'typeorm';
 import { ProcessModel } from '../infra/database/typeOrm/models/process.entity';
 import { ProcessEntity } from './entities/process.entity';
 import { FindProcessesDto } from './dto/find-processes.dto';
+import { ExtractProcessesEvent } from './events/extract-processes.event';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ProcessesService {
-  constructor(private dataSource: DataSource) {}
+  constructor(
+    private dataSource: DataSource,
+    private eventEmitter: EventEmitter2,
+  ) {}
 
   async create(createProcessDto: CreateProcessDto): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -133,5 +138,12 @@ export class ProcessesService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async extractProcesses(): Promise<void> {
+    const extractProcessesEvent = new ExtractProcessesEvent();
+    this.eventEmitter.emit('processes.extract', extractProcessesEvent);
+
+    return;
   }
 }

@@ -18,6 +18,11 @@ import { FindProcessesDto } from './dto/find-processes.dto';
 export class ProcessesController {
   constructor(private readonly processesService: ProcessesService) {}
 
+  @Get('extract')
+  async extractProcesses(): Promise<void> {
+    return await this.processesService.extractProcesses();
+  }
+
   @Post()
   async create(@Body() createProcessDto: CreateProcessDto): Promise<void> {
     return await this.processesService.create(createProcessDto);
@@ -46,10 +51,5 @@ export class ProcessesController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     return await this.processesService.remove(+id);
-  }
-
-  @Get('extract')
-  async extractProcesses(): Promise<void> {
-    return;
   }
 }
