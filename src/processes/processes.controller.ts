@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ProcessesService } from './processes.service';
 import { CreateProcessDto } from './dto/create-process.dto';
 import { UpdateProcessDto } from './dto/update-process.dto';
 import { ProcessEntity } from './entities/process.entity';
+import { FindProcessesDto } from './dto/find-processes.dto';
 
 @Controller('processes')
 export class ProcessesController {
@@ -22,8 +24,10 @@ export class ProcessesController {
   }
 
   @Get()
-  async findAll(): Promise<ProcessEntity[]> {
-    return await this.processesService.findAll();
+  async findAll(
+    @Query() findProcessesDto: FindProcessesDto,
+  ): Promise<ProcessEntity[]> {
+    return await this.processesService.findAll(findProcessesDto);
   }
 
   @Get(':id')

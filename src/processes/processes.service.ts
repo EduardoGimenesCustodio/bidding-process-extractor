@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProcessDto } from './dto/create-process.dto';
 import { UpdateProcessDto } from './dto/update-process.dto';
-import { DataSource } from 'typeorm';
+import { DataSource, Like, MoreThanOrEqual } from 'typeorm';
 import { ProcessModel } from '../infra/database/typeOrm/models/process.entity';
 import { ProcessEntity } from './entities/process.entity';
+import { FindProcessesDto } from './dto/find-processes.dto';
 
 @Injectable()
 export class ProcessesService {
@@ -26,7 +27,7 @@ export class ProcessesService {
     }
   }
 
-  async findAll(): Promise<ProcessEntity[]> {
+  async findAll(findProcessesDto: FindProcessesDto): Promise<ProcessEntity[]> {
     let processes: ProcessEntity[];
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -34,7 +35,32 @@ export class ProcessesService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      processes = await queryRunner.manager.find(ProcessModel);
+      const { dataHoraInicioLances, numero, resumo, descricaoItem } =
+        findProcessesDto;
+
+      let whereOptions: object[] = [];
+
+      if (dataHoraInicioLances || numero || resumo || descricaoItem) {
+        whereOptions = [
+          {
+            dataHoraInicioLances: MoreThanOrEqual(
+              new Date(dataHoraInicioLances),
+            ),
+          },
+          { numero: numero },
+          { resumo: Like(`%${resumo}%`) },
+          {
+            items: {
+              descricao: Like(`%${descricaoItem}%`),
+            },
+          },
+        ];
+      }
+
+      processes = await queryRunner.manager.find(ProcessModel, {
+        where: whereOptions,
+        relations: ['items'],
+      });
 
       await queryRunner.commitTransaction();
     } catch (err) {
