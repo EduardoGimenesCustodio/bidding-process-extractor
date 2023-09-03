@@ -8,6 +8,16 @@ This API automatically extracts bidding processes from the [public procurement p
 $ npm install
 ```
 
+## Preparing the database
+
+```bash
+# run existing migrations
+$ npm run typeorm:run-migrations
+
+# generate new migrations in case of changes in database models
+$ npm run typeorm:generate-migration
+```
+
 ## Running the app
 
 ```bash
@@ -34,6 +44,6 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## API Documentation
+## API documentation
 
 The Bidding Process Extractor API description can be accessed via the [/api](http://localhost:3000/api) route.
