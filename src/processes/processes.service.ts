@@ -15,13 +15,12 @@ export class ProcessesService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const process: Omit<ProcessModel, 'id'> = createProcessDto;
-
-      await queryRunner.manager.save(process);
+      await queryRunner.manager.insert(ProcessModel, createProcessDto);
 
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
     }
@@ -40,6 +39,7 @@ export class ProcessesService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
 
@@ -62,6 +62,7 @@ export class ProcessesService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
 
@@ -80,6 +81,7 @@ export class ProcessesService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
     }
@@ -99,6 +101,7 @@ export class ProcessesService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
     }

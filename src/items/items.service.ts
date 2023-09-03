@@ -15,12 +15,12 @@ export class ItemsService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const item: Omit<ItemModel, 'id'> = createItemDto;
-      await queryRunner.manager.save(item);
+      await queryRunner.manager.insert(ItemModel, createItemDto);
 
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
     }
@@ -39,6 +39,7 @@ export class ItemsService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
 
@@ -59,6 +60,7 @@ export class ItemsService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
 
@@ -77,6 +79,7 @@ export class ItemsService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
     }
@@ -96,6 +99,7 @@ export class ItemsService {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
+      throw new Error(err);
     } finally {
       await queryRunner.release();
     }
