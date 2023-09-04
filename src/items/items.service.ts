@@ -104,4 +104,22 @@ export class ItemsService {
       await queryRunner.release();
     }
   }
+
+  async removeAll(): Promise<void> {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const items = await queryRunner.manager.find(ItemModel);
+      await queryRunner.manager.remove(items);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new Error(err);
+    } finally {
+      await queryRunner.release();
+    }
+  }
 }
