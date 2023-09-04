@@ -32,7 +32,7 @@ export class ProcessesService {
     }
   }
 
-  async findAll(findProcessesDto: FindProcessesDto): Promise<ProcessEntity[]> {
+  async findAll(findProcessesDto?: FindProcessesDto): Promise<ProcessEntity[]> {
     let processes: ProcessEntity[];
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -43,30 +43,26 @@ export class ProcessesService {
       const { dataHoraInicioLances, numero, resumo, descricaoItem } =
         findProcessesDto;
 
-      let whereOptions: object[] = [];
+      let whereOptions: object = {};
 
       if (dataHoraInicioLances || numero || resumo || descricaoItem) {
-        whereOptions = [
-          {
-            dataHoraInicioLances: MoreThanOrEqual(
-              new Date(dataHoraInicioLances),
-            ),
+        whereOptions = {
+          dataHoraInicioLances: dataHoraInicioLances
+            ? MoreThanOrEqual(new Date(dataHoraInicioLances))
+            : undefined,
+          numero: numero ? numero : undefined,
+          resumo: resumo ? Like(`%${resumo}%`) : undefined,
+          items: {
+            descricao: descricaoItem ? Like(`%${descricaoItem}%`) : undefined,
           },
-          { numero: numero },
-          { resumo: Like(`%${resumo}%`) },
-          {
-            items: {
-              descricao: Like(`%${descricaoItem}%`),
-            },
-          },
-        ];
+        };
       }
 
       processes = await queryRunner.manager.find(ProcessModel, {
         where: whereOptions,
         relations: { items: true },
-        skip: findProcessesDto.skip ? +findProcessesDto.skip : null,
-        take: findProcessesDto.take ? +findProcessesDto.take : null,
+        skip: findProcessesDto.skip ? +findProcessesDto.skip : undefined,
+        take: findProcessesDto.take ? +findProcessesDto.take : undefined,
       });
 
       await queryRunner.commitTransaction();
