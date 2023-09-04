@@ -7,4 +7,7 @@ export default () => ({
     password: process.env.DATABASE_PASSWORD,
     name: process.env.DATABASE_NAME,
   },
+  publicProcurementPortalApi: {
+    host: process.env.PUBLIC_PROCUREMENT_PORTAL_API_HOST,
+  },
 });

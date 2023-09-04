@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { DataSource } from 'typeorm';
-import { ItemModel } from 'src/infra/database/typeOrm/models/item.entity';
+import { ItemModel } from '../infra/database/typeOrm/models/item.entity';
 import { ItemEntity } from './entities/item.entity';
 
 @Injectable()
