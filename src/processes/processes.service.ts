@@ -140,6 +140,24 @@ export class ProcessesService {
     }
   }
 
+  async removeAll(): Promise<void> {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const processes = await queryRunner.manager.find(ProcessModel);
+      await queryRunner.manager.remove(processes);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new Error(err);
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
   async extractProcesses(): Promise<void> {
     const extractProcessesEvent = new ExtractProcessesEvent();
     this.eventEmitter.emit('processes.extract', extractProcessesEvent);
