@@ -31,19 +31,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
 ## API documentation
 
 The Bidding Process Extractor API description can be accessed via the [/api](http://localhost:3000/api) route.

@@ -23,7 +23,7 @@ export class ExtractProcessesListener {
     );
 
     const limitDate = new Date();
-    limitDate.setFullYear(limitDate.getFullYear() + 1);
+    limitDate.setDate(limitDate.getDate() + 30);
 
     await this.createProcesses(publicProcurementPortalApiHost, limitDate);
 
