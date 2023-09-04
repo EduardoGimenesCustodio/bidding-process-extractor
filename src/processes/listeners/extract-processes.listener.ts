@@ -16,7 +16,7 @@ export class ExtractProcessesListener {
     private processesService: ProcessesService,
   ) {}
 
-  @OnEvent('processes.extract')
+  @OnEvent('processes.extract', { promisify: false })
   async handleExtractProcessesEvent(event: ExtractProcessesEvent) {
     const publicProcurementPortalApiHost = this.configService.get<string>(
       'publicProcurementPortalApi.host',
@@ -53,12 +53,12 @@ export class ExtractProcessesListener {
 
     if (!processes.length) return;
 
-    const processToCreate: ProcessEntity[] = processes.map((process) => {
+    const processesToCreate: ProcessEntity[] = processes.map((process) => {
       return { ...process, codigoStatus: process.status.codigo };
     });
 
     await Promise.all(
-      processToCreate.map(async (process) => {
+      processesToCreate.map(async (process) => {
         await this.processesService.create(process);
       }),
     );
