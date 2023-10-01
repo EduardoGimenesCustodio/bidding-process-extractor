@@ -15,13 +15,23 @@ export class ProcessesService {
     private eventEmitter: EventEmitter2,
   ) {}
 
-  async create(createProcessDto: CreateProcessDto): Promise<void> {
+  async create(
+    createProcessDto: CreateProcessDto,
+  ): Promise<{ processId: number; codigoLicitacao: number }> {
+    let processId: number;
+    let codigoLicitacao: number;
+
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await queryRunner.manager.insert(ProcessModel, createProcessDto);
+      const process = await queryRunner.manager.insert(
+        ProcessModel,
+        createProcessDto,
+      );
+      processId = process.identifiers[0].id;
+      codigoLicitacao = createProcessDto.codigoLicitacao;
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -29,6 +39,8 @@ export class ProcessesService {
       throw new Error(err);
     } finally {
       await queryRunner.release();
+
+      return { processId, codigoLicitacao };
     }
   }
 

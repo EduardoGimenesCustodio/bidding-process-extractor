@@ -25,7 +25,9 @@ export class ProcessesController {
 
   @Post()
   async create(@Body() createProcessDto: CreateProcessDto): Promise<void> {
-    return await this.processesService.create(createProcessDto);
+    await this.processesService.create(createProcessDto);
+
+    return;
   }
 
   @Get()
