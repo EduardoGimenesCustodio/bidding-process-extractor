@@ -7,6 +7,8 @@ import { catchError, firstValueFrom } from 'rxjs';
 import { AxiosError } from 'axios';
 import { ProcessEntity } from '../entities/process.entity';
 import { ProcessesService } from '../processes.service';
+import { ItemsService } from '../../items/items.service';
+import { ItemEntity } from '../../items/entities/item.entity';
 
 @Injectable()
 export class ExtractProcessesListener {
@@ -14,29 +16,27 @@ export class ExtractProcessesListener {
     private configService: ConfigService,
     private readonly httpService: HttpService,
     private processesService: ProcessesService,
+    private itemsService: ItemsService,
   ) {}
+
+  publicProcurementPortalApiHost = this.configService.get<string>(
+    'publicProcurementPortalApi.host',
+  );
 
   @OnEvent('processes.extract', { promisify: false })
   async handleExtractProcessesEvent(event: ExtractProcessesEvent) {
-    const publicProcurementPortalApiHost = this.configService.get<string>(
-      'publicProcurementPortalApi.host',
-    );
+    await this.processesService.removeAll();
+    await this.itemsService.removeAll();
 
-    const limitDate = new Date();
-    limitDate.setDate(limitDate.getDate() + 30);
-
-    await this.createProcesses(publicProcurementPortalApiHost, limitDate);
+    await this.createProcesses();
 
     console.log(event);
   }
 
-  async createProcesses(
-    publicProcurementPortalApiHost: string,
-    limitDate: Date,
-  ): Promise<void> {
+  async createProcesses(): Promise<void> {
     const { data } = await firstValueFrom(
       this.httpService
-        .get(`${publicProcurementPortalApiHost}/licitacao/processos`)
+        .get(`${this.publicProcurementPortalApiHost}/licitacao/processos`)
         .pipe(
           catchError((err: AxiosError) => {
             throw err;
@@ -44,12 +44,7 @@ export class ExtractProcessesListener {
         ),
     );
 
-    const processes = data.result.filter((process) => {
-      const processDate = new Date(process.dataHoraInicioLances);
-      if (processDate <= limitDate) return process;
-    });
-
-    await this.processesService.removeAll();
+    const processes = data.result;
 
     if (!processes.length) return;
 
@@ -59,7 +54,41 @@ export class ExtractProcessesListener {
 
     await Promise.all(
       processesToCreate.map(async (process) => {
-        await this.processesService.create(process);
+        const { processId, codigoLicitacao } =
+          await this.processesService.create(process);
+        await this.createItems(processId, codigoLicitacao);
+      }),
+    );
+  }
+
+  async createItems(processId: number, codigoLicitacao: number): Promise<void> {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get(
+          `${this.publicProcurementPortalApiHost}/licitacao/${codigoLicitacao}/itens`,
+        )
+        .pipe(
+          catchError((err: AxiosError) => {
+            throw err;
+          }),
+        ),
+    );
+
+    const items = data.itens.result;
+
+    if (!items.length) return;
+
+    const itemsToCreate: ItemEntity[] = items.map((item) => {
+      return {
+        ...item,
+        processId,
+        codigoParticipacao: item.participacao.codigo,
+      };
+    });
+
+    await Promise.all(
+      itemsToCreate.map(async (item) => {
+        await this.itemsService.create(item);
       }),
     );
   }
