@@ -74,6 +74,8 @@ export class ExtractProcessesListener {
         ),
     );
 
+    if (!data.itens) return;
+
     const items = data.itens.result;
 
     if (!items.length) return;

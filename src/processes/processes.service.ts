@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateProcessDto } from './dto/create-process.dto';
 import { UpdateProcessDto } from './dto/update-process.dto';
 import { DataSource, Like, MoreThanOrEqual } from 'typeorm';
@@ -7,6 +7,7 @@ import { ProcessEntity } from './entities/process.entity';
 import { FindProcessesDto } from './dto/find-processes.dto';
 import { ExtractProcessesEvent } from './events/extract-processes.event';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class ProcessesService {
@@ -14,6 +15,8 @@ export class ProcessesService {
     private dataSource: DataSource,
     private eventEmitter: EventEmitter2,
   ) {}
+
+  private readonly logger = new Logger(ProcessesService.name);
 
   async create(
     createProcessDto: CreateProcessDto,
@@ -171,5 +174,11 @@ export class ProcessesService {
     this.eventEmitter.emit('processes.extract', extractProcessesEvent);
 
     return;
+  }
+
+  @Cron(CronExpression.EVERY_6_HOURS)
+  handleCron() {
+    this.extractProcesses();
+    this.logger.log('Bidding processes were extracted');
   }
 }
